@@ -119,21 +119,22 @@ public class MetadataService {
         Metadata[] mobjects = new Metadata[objects.size()];
         int s = 0;
         for (Map<String, Object> map : objects) {
-        	mobjects[s] = toMetadataObject(beanUtilsBean, metadataType, map);
+        	Object metadataObject = toMetadataObject(beanUtilsBean, metadataType, map); 
+        	mobjects[s] = (Metadata) metadataObject;
             s++;
         }
         return mobjects;
     }
     
-    private static <T> Metadata toMetadataObject(BeanUtilsBean beanUtilsBean, MetadataType metadataType, Map<String, Object> map) throws Exception {
-    	Metadata metadataObject = metadataType.getMetadataObject();
+    private static <T> Object toMetadataObject(BeanUtilsBean beanUtilsBean, MetadataType metadataType, Map<String, Object> map) throws Exception {
+    	Object metadataObject = metadataType.getMetadataObject();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
            String key = entry.getKey();
            
            // if the object is a map, transform to object
            if (entry.getValue() instanceof Map) {
-        	   PropertyUtilsBean propertyUtilsBean = new PropertyUtilsBean();
-        	   Class childClass = propertyUtilsBean.getPropertyType(metadataObject, key);
+               PropertyUtilsBean propertyUtilsBean = new PropertyUtilsBean();
+               Class<?> childClass = propertyUtilsBean.getPropertyType(metadataObject, key);
         	   MetadataType childType = MetadataType.getByClass(childClass);
         	   if (childType != null){
         	   		beanUtilsBean.setProperty(metadataObject, key, toMetadataObject(beanUtilsBean, childType, toMObjectMap((Map) entry.getValue())));
@@ -143,32 +144,40 @@ public class MetadataService {
            //if the object is a list, transform to array
            else if (entry.getValue() instanceof List) {
         	   List<Object> objectsList = (List) entry.getValue();
-        	   Metadata[] mobjects = new Metadata[objectsList.size()];
+        	   Object[] mobjects = new Object[objectsList.size()];
         	   int s=0;
         	   Class metadataClass = null;
         	   for (Object objectEntry : objectsList ) {
         		   if (objectEntry instanceof Map) {
         			   PropertyUtilsBean propertyUtilsBean = new PropertyUtilsBean();
-                	   Class childClass = propertyUtilsBean.getPropertyType(metadataObject, key);
+                	   Class<?> childClass = propertyUtilsBean.getPropertyType(metadataObject, key);
                 	   if (childClass != null && childClass.isArray()) {
                 		   childClass = childClass.getComponentType();
                 	   }
                 	   if (metadataClass == null) {
                 		   metadataClass = childClass;
                 	   }
-                	   MetadataType childType = MetadataType.getByClass(childClass);
-                	   mobjects[s] = toMetadataObject(beanUtilsBean, childType, toMObjectMap((Map) objectEntry));
-                	   s++;
+                	   MetadataType childType = MetadataType.getByClass(metadataClass);
+                	   if (childType != null) {
+                		   mobjects[s] = toMetadataObject(beanUtilsBean, childType, toMObjectMap((Map) objectEntry));
+                		   s++;
+                	   }
         		   }
         	   }
+        	   // we have an array of custom properties
         	   if (metadataClass != null) {
-        		   Object[] metadataChildObject = (T[]) Array.newInstance(metadataClass, mobjects.length);
+        		   Object[] metadataChildObjects = (T[]) Array.newInstance(metadataClass, mobjects.length);
         		   for (int i=0;i<mobjects.length;i++) {
-        			   metadataChildObject[i] = metadataClass.cast(mobjects[i]);
+        			   metadataChildObjects[i] = metadataClass.cast(mobjects[i]);
         		   }
-        		   beanUtilsBean.setProperty(metadataObject, key, metadataChildObject);
+        		   beanUtilsBean.setProperty(metadataObject, key, metadataChildObjects);
+        	   }
+        	   //we have an array of primitives
+        	   else {
+        		   beanUtilsBean.setProperty(metadataObject, key, entry.getValue());
         	   }
            }
+           // normal property
             else {
             	beanUtilsBean.setProperty(metadataObject, key, entry.getValue());
            }

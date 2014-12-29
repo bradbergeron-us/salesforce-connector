@@ -10,7 +10,6 @@
 
 package org.mule.modules.salesforce.metadata.type;
 
-import com.sforce.soap.metadata.Metadata;
 
 
 /**
@@ -29,13 +28,42 @@ public enum MetadataType {
     RecordType("com.sforce.soap.metadata", com.sforce.soap.metadata.RecordType.class, "RecordType"),
     SharingReason("com.sforce.soap.metadata", com.sforce.soap.metadata.SharingReason.class, "SharingReason"),
     ValidationRule("com.sforce.soap.metadata", com.sforce.soap.metadata.ValidationRule.class, "ValidationRule"),
-    WebLink("com.sforce.soap.metadata", com.sforce.soap.metadata.WebLink.class, "WebLink");
+    WebLink("com.sforce.soap.metadata", com.sforce.soap.metadata.WebLink.class, "WebLink"),
+	ActionOverride("com.sforce.soap.metadata", com.sforce.soap.metadata.ActionOverride.class, "ActionOverride"),
+	HistoryRetentionPolicy("com.sforce.soap.metadata", com.sforce.soap.metadata.HistoryRetentionPolicy.class, "HistoryRetentionPolicy"),
+	PermissionSet("com.sforce.soap.metadata", com.sforce.soap.metadata.PermissionSet.class, "PermissionSet"),
+	PermissionSetApplicationVisibility("com.sforce.soap.metadata", com.sforce.soap.metadata.PermissionSetApplicationVisibility.class, "PermissionSetApplicationVisibility"),
+	PermissionSetApexClassAccess("com.sforce.soap.metadata", com.sforce.soap.metadata.PermissionSetApexClassAccess.class, "PermissionSetApexClassAccess"),
+	PermissionSetCustomPermissions("com.sforce.soap.metadata", com.sforce.soap.metadata.PermissionSetCustomPermissions.class, "PermissionSetCustomPermissions"),
+	PermissionSetExternalDataSourceAccess("com.sforce.soap.metadata", com.sforce.soap.metadata.PermissionSetExternalDataSourceAccess.class, "PermissionSetExternalDataSourceAccess"),
+	PermissionSetFieldPermissions("com.sforce.soap.metadata", com.sforce.soap.metadata.PermissionSetFieldPermissions.class, "PermissionSetFieldPermissions"),
+	PermissionSetObjectPermissions("com.sforce.soap.metadata", com.sforce.soap.metadata.PermissionSetObjectPermissions.class, "PermissionSetObjectPermissions"),
+	PermissionSetApexPageAccess("com.sforce.soap.metadata", com.sforce.soap.metadata.PermissionSetApexPageAccess.class, "PermissionSetApexPageAccess"),
+	PermissionSetRecordTypeVisibility("com.sforce.soap.metadata", com.sforce.soap.metadata.PermissionSetRecordTypeVisibility.class, "PermissionSetRecordTypeVisibility"),
+	PermissionSetTabSetting("com.sforce.soap.metadata", com.sforce.soap.metadata.PermissionSetTabSetting.class, "PermissionSetTabSetting"),
+	PermissionSetUserPermission("com.sforce.soap.metadata", com.sforce.soap.metadata.PermissionSetUserPermission.class, "PermissionSetUserPermission"),
+	Profile("com.sforce.soap.metadata", com.sforce.soap.metadata.Profile.class, "Profile"),
+	ProfileApplicationVisibility("com.sforce.soap.metadata", com.sforce.soap.metadata.ProfileApplicationVisibility.class, "ProfileApplicationVisibility"),
+	ProfileApexClassAccess("com.sforce.soap.metadata", com.sforce.soap.metadata.ProfileApexClassAccess.class, "ProfileApexClassAccess"),
+	ProfileCustomPermissions("com.sforce.soap.metadata", com.sforce.soap.metadata.ProfileCustomPermissions.class, "ProfileCustomPermissions"),
+	ProfileExternalDataSourceAccess("com.sforce.soap.metadata", com.sforce.soap.metadata.ProfileExternalDataSourceAccess.class, "ProfileExternalDataSourceAccess"),
+	ProfileFieldLevelSecurity("com.sforce.soap.metadata", com.sforce.soap.metadata.ProfileFieldLevelSecurity.class, "ProfileFieldLevelSecurity"),
+	ProfileLayoutAssignment("com.sforce.soap.metadata", com.sforce.soap.metadata.ProfileLayoutAssignment.class, "ProfileLayoutAssignment"),
+	ProfileLoginHours("com.sforce.soap.metadata", com.sforce.soap.metadata.ProfileLoginHours.class, "ProfileLoginHours"),
+	ProfileLoginIpRange("com.sforce.soap.metadata", com.sforce.soap.metadata.ProfileLoginIpRange.class, "ProfileLoginIpRange"),
+	ProfileObjectPermissions("com.sforce.soap.metadata", com.sforce.soap.metadata.ProfileObjectPermissions.class, "ProfileObjectPermissions"),
+	ProfileApexPageAccess("com.sforce.soap.metadata", com.sforce.soap.metadata.ProfileApexPageAccess.class, "ProfileApexPageAccess"),
+	ProfileRecordTypeVisibility("com.sforce.soap.metadata", com.sforce.soap.metadata.ProfileRecordTypeVisibility.class, "ProfileRecordTypeVisibility"),
+	ProfileTabVisibility("com.sforce.soap.metadata", com.sforce.soap.metadata.ProfileTabVisibility.class, "ProfileTabVisibility"),
+	ProfileUserPermission("com.sforce.soap.metadata", com.sforce.soap.metadata.ProfileUserPermission.class, "ProfileUserPermission");
+	
+	
 
     String entityPackage;
-    Class<? extends com.sforce.soap.metadata.Metadata> metadataEntityClass;
+    Class<?> metadataEntityClass;
     String displayName;
 
-    MetadataType(String entityPackage, Class<? extends com.sforce.soap.metadata.Metadata> metadataEntityClass, String displayName) {
+    MetadataType(String entityPackage, Class<?> metadataEntityClass, String displayName) {
         this.entityPackage = entityPackage;
         this.metadataEntityClass = metadataEntityClass;
         this.displayName = displayName;
@@ -46,7 +74,7 @@ public enum MetadataType {
         return this.entityPackage;
     }
 
-    public Class<? extends com.sforce.soap.metadata.Metadata> getMetadataEntityClass() {
+    public Class<?> getMetadataEntityClass() {
         return this.metadataEntityClass;
     }
 
@@ -54,13 +82,22 @@ public enum MetadataType {
         return  displayName;
     }
     
-    public Metadata getMetadataObject() throws InstantiationException, IllegalAccessException {
+    public Object getMetadataObject() throws InstantiationException, IllegalAccessException {
     	return this.metadataEntityClass.newInstance();
     }
     
-    public static MetadataType getByClass(Class<? extends com.sforce.soap.metadata.Metadata> clazz){
-    	for (MetadataType type : values()) {
+    public static MetadataType getByClass(Class<?> clazz){
+    	for (MetadataType type : MetadataType.values()) {
     	    if (type.metadataEntityClass.equals(clazz)) {
+    	      return type;
+    	    }
+    	  }
+    	return null;
+    }
+    
+    public static MetadataType getByName(String name){
+    	for (MetadataType type : MetadataType.values()) {
+    	    if (type.displayName.equalsIgnoreCase(name)) {
     	      return type;
     	    }
     	  }
