@@ -1511,7 +1511,7 @@ public class SalesforceConnector implements MuleContextAware {
 	 * You can retrieve packaged and unpackaged components in the same retrieve.
 	 * @param specificFiles A list of file names to be retrieved.
 	 * If a value is specified for this property, packageNames must be set to null.
-	 * @param unpackaged A list of components to retrieve that are not in a package
+	 * @param unpackaged A stream containing a list of components to retrieve that are not in a package.
 	 * @param output output file
 	 * @return {@link java.io.InputStream} representing result of the retrieve job.
 	 * @throws Exception when there is an error
@@ -1520,7 +1520,7 @@ public class SalesforceConnector implements MuleContextAware {
 	@OAuthProtected
 	@Category(name = "Metadata Calls", description = "A set of calls that compromise the metadata of the API.")
 	@MetaDataScope(MetadataCategory.class)
-	public InputStream retrieveMetadata(List<String> packageNames, List<String> specificFiles, String unpackaged) throws Exception {
+	public InputStream retrieveMetadata(List<String> packageNames, List<String> specificFiles, InputStream unpackaged) throws Exception {
 		return MetadataService.callRetrieveService(getSalesforceMetadaAdapter(), packageNames, specificFiles, unpackaged);
 	}
 

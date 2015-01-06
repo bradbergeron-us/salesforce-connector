@@ -14,8 +14,6 @@
 package org.mule.modules.salesforce.metadata;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Array;
@@ -194,7 +192,7 @@ public class MetadataService {
 		return "The files were successfully deployed";
 	}
 	
-	public static InputStream callRetrieveService(CustomMetadataConnection connection, List<String> packageNames, List<String> specificFiles, String unpackaged) throws Exception {
+	public static InputStream callRetrieveService(CustomMetadataConnection connection, List<String> packageNames, List<String> specificFiles, InputStream unpackaged) throws Exception {
 		RetrieveRequest retrieveRequest = new RetrieveRequest();
 		// The version in package.xml overrides the version in RetrieveRequest
 		retrieveRequest.setApiVersion(API_VERSION);
@@ -211,7 +209,7 @@ public class MetadataService {
 			}
 		}
 		
-		if(StringUtils.isNotBlank(unpackaged)) {
+		if(unpackaged != null) {
 			setUnpackaged(retrieveRequest, unpackaged);
 		}
 		
@@ -250,23 +248,11 @@ public class MetadataService {
 		return new ByteArrayInputStream(result.getZipFile());
 	}
 	
-	private static void setUnpackaged(RetrieveRequest request, String file) throws Exception {
-		File unpackedManifest = new File(file);
-		if (!unpackedManifest.exists() || !unpackedManifest.isFile())
-			throw new Exception("Should provide a valid retrieve manifest for unpackaged content. Looking for "
-					+ unpackedManifest.getAbsolutePath());
-		// Note that we populate the _package object by parsing a manifest file here.
-		// You could populate the _package based on any source for your particular application.
-		com.sforce.soap.metadata.Package p = parsePackage(unpackedManifest);
-		request.setUnpackaged(p);
-	}
-	
-	private static com.sforce.soap.metadata.Package parsePackage(File file) throws Exception {
+	private static void setUnpackaged(RetrieveRequest request, InputStream unpackaged) throws Exception {
 		try {
-			InputStream is = new FileInputStream(file);
 			List<PackageTypeMembers> pd = new ArrayList<PackageTypeMembers>();
 			DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			Element d = db.parse(is).getDocumentElement();
+			Element d = db.parse(unpackaged).getDocumentElement();
 			for (Node c = d.getFirstChild(); c != null; c = c.getNextSibling()) {
 				if (c instanceof Element) {
 					Element ce = (Element) c;
@@ -292,7 +278,7 @@ public class MetadataService {
 			com.sforce.soap.metadata.Package r = new com.sforce.soap.metadata.Package();
 			r.setTypes(pd.toArray(new PackageTypeMembers[pd.size()]));
 			r.setVersion(API_VERSION + "");
-			return r;
+			request.setUnpackaged(r);
 		} catch (ParserConfigurationException pce) {
 			throw new Exception("Cannot create XML parser", pce);
 		} catch (IOException ioe) {
