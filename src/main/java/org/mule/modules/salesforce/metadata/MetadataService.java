@@ -200,12 +200,17 @@ public class MetadataService {
 		retrieveRequest.setApiVersion(API_VERSION);
 		
 		if(specificFiles != null && specificFiles.size() > 0) {
-			if(StringUtils.isNotBlank(unpackaged)) {
+			if(packageNames != null && packageNames.size() > 0) {
 				throw new Exception("If a value is specified for specific files, packageNames must be set to null");
 			}
 			retrieveRequest.setSinglePackage(true);
 			retrieveRequest.setSpecificFiles(specificFiles.toArray(new String[specificFiles.size()]));
+		} else {
+			if(packageNames != null && packageNames.size() > 0) {
+				retrieveRequest.setPackageNames(packageNames.toArray(new String[packageNames.size()]));
+			}
 		}
+		
 		if(StringUtils.isNotBlank(unpackaged)) {
 			setUnpackaged(retrieveRequest, unpackaged);
 		}
