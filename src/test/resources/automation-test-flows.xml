@@ -365,5 +365,16 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
             <sfdc:objects ref="#[payload.objects]" />
         </sfdc:upsert-metadata>
     </flow>
+    
+   	<flow name="retrieve-metadata" doc:name="retrieve-metadata">
+	<sfdc:retrieve-metadata config-ref="Salesforce" doc:name="Retrieve metadata" unpackaged-ref="#[payload.unpackagedRef]">
+		<sfdc:package-names ref="#[payload.packageNames]"/>
+           <sfdc:specific-files ref="#[payload.specificFiles]"/>
+	</sfdc:retrieve-metadata>
+	</flow>
+	
+	<flow name="deploy-metadata" doc:name="deploy-metadata">
+		<sfdc:deploy-metadata config-ref="Salesforce" doc:name="Deploy metadata" stream-ref="#[payload.streamRef]"/>
+	</flow>
 
 </mule>
