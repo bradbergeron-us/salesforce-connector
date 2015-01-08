@@ -1496,7 +1496,7 @@ public class SalesforceConnector implements MuleContextAware {
 	@OAuthProtected
 	@Category(name = "Metadata Calls", description = "A set of calls that compromise the metadata of the API.")
 	@MetaDataScope(MetadataCategory.class)
-	public String deployMetadata(@Default("#[payload]") InputStream stream) throws Exception {
+	public String deployMetadata(@FriendlyName("File stream") @Default("#[payload]") InputStream stream) throws Exception {
 		return MetadataService.callDeployService(getSalesforceMetadaAdapter(), stream);
 	}
 	
@@ -1520,7 +1520,7 @@ public class SalesforceConnector implements MuleContextAware {
 	@OAuthProtected
 	@Category(name = "Metadata Calls", description = "A set of calls that compromise the metadata of the API.")
 	@MetaDataScope(MetadataCategory.class)
-	public InputStream retrieveMetadata(List<String> packageNames, List<String> specificFiles, InputStream unpackaged) throws Exception {
+	public InputStream retrieveMetadata(@Optional List<String> packageNames, @Optional List<String> specificFiles, @Optional InputStream unpackaged) throws Exception {
 		return MetadataService.callRetrieveService(getSalesforceMetadaAdapter(), packageNames, specificFiles, unpackaged);
 	}
 
