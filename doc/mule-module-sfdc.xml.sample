@@ -339,3 +339,9 @@
 <!-- BEGIN_INCLUDE(sfdc:get-session-id) -->
 	<sfdc:get-session-id config-ref="mySalesforceConfig"/>
 <!-- END_INCLUDE(sfdc:get-session-id) -->
+<!-- BEGIN_INCLUDE(sfdc:deploy-metadata) -->
+	<sfdc:deploy-metadata config-ref="mySalesforceConfig" stream="#[payload]"/>
+<!-- END_INCLUDE(sfdc:deploy-metadata) -->
+<!-- BEGIN_INCLUDE(sfdc:retrieve-metadata) -->
+	<sfdc:retrieve-metadata config-ref="mySalesforceConfig" unpackaged="#[payload]"/>
+<!-- END_INCLUDE(sfdc:retrieve-metadata) -->

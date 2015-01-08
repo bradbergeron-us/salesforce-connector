@@ -54,7 +54,9 @@ import org.mule.modules.salesforce.automation.testcases.*;
 	UpsertTestCases.class,
     CreateMetadataTestCases.class,
     DeleteMetadataTestCases.class,
-    DescribeMetadataTestCases.class
+    DescribeMetadataTestCases.class,
+    DeployRetrieveMetadataTestCases.class,
+    DeployRetrieveMetadataApexClassTestCases.class
 
 })
 
