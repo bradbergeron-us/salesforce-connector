@@ -10,19 +10,26 @@
 
 package org.mule.modules.salesforce.metadata.category;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+
 import org.mule.api.annotations.MetaDataCategory;
 import org.mule.api.annotations.MetaDataKeyRetriever;
 import org.mule.api.annotations.MetaDataOutputRetriever;
 import org.mule.api.annotations.MetaDataRetriever;
-import org.mule.common.metadata.*;
+import org.mule.common.metadata.DefaultDefinedMapMetaDataModel;
+import org.mule.common.metadata.DefaultMetaData;
+import org.mule.common.metadata.DefaultMetaDataKey;
+import org.mule.common.metadata.MetaData;
+import org.mule.common.metadata.MetaDataKey;
 import org.mule.common.metadata.builder.DefaultMetaDataBuilder;
 import org.mule.common.metadata.builder.PojoMetaDataBuilder;
 import org.mule.modules.salesforce.SalesforceConnector;
 import org.mule.modules.salesforce.metadata.type.MetadataType;
 
-import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
+import com.sforce.soap.metadata.Metadata;
 
 /**
  * @author Mulesoft, Inc
@@ -38,7 +45,9 @@ public class MetadataCategory {
         List<MetaDataKey> metaDataKeyList = new ArrayList<MetaDataKey>();
 
         for (MetadataType metadataEntity : MetadataType.values()) {
-            metaDataKeyList.add(new DefaultMetaDataKey(metadataEntity.name(), metadataEntity.getDisplayName()));
+        	if (metadataEntity.getMetadataEntityClass().getSuperclass() == Metadata.class) {
+        		metaDataKeyList.add(new DefaultMetaDataKey(metadataEntity.name(), metadataEntity.getDisplayName()));
+        	}
         }
 
         return metaDataKeyList;
