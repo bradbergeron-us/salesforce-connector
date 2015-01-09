@@ -4,13 +4,13 @@
     <parent>
         <groupId>org.mule.tools.devkit</groupId>
         <artifactId>mule-devkit-parent</artifactId>
-        <version>3.5.3-SNAPSHOT</version>
+        <version>3.5.3</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.mule.modules</groupId>
     <artifactId>mule-module-sfdc</artifactId>
-    <version>5.4.11</version>
+    <version>5.4.11-SNAPSHOT</version>
     <packaging>mule-module</packaging>
     <name>Mule Salesforce Connector</name>
 
