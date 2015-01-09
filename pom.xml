@@ -19,7 +19,7 @@
         <licensePath>LICENSE.md</licensePath>
         <devkit.studio.package.skip>false</devkit.studio.package.skip>
         <jetty.client.version>8.1.13.v20130916</jetty.client.version>
-        <jetty.shaded.version>8_1</jetty.shaded.version>
+        <jetty.shaded.version>8_1_13_v20130916</jetty.shaded.version>
         <cometd.shaded.version>2_2</cometd.shaded.version>
         <wsc.version>31.0.0-hf1</wsc.version>
         <connector.test.version>2.0.3</connector.test.version>
