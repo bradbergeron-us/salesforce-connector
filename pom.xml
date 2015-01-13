@@ -19,6 +19,8 @@
         <licensePath>LICENSE.md</licensePath>
         <devkit.studio.package.skip>false</devkit.studio.package.skip>
         <jetty.client.version>8.1.13.v20130916</jetty.client.version>
+        <jetty.shaded.version>8_1_13_v20130916</jetty.shaded.version>
+        <cometd.shaded.version>2_2</cometd.shaded.version>
         <wsc.version>32.1.1-hf1</wsc.version>
         <connector.test.version>2.0.3</connector.test.version>
         <mule.test.timeoutSecs>180</mule.test.timeoutSecs>
@@ -27,6 +29,35 @@
 
     <build>
         <plugins>
+        	<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.3</version>
+                <configuration>
+                    <!-- custom shade configuration -->
+                    <artifactSet>
+                        <includes>
+                            <include>org.cometd.java:cometd-java-client</include>
+                            <include>org.cometd.java:bayeux-api</include>
+                            <include>org.cometd.java:cometd-java-common</include>
+                            <include>org.eclipse.jetty:jetty-client</include>
+                            <include>org.eclipse.jetty:jetty-http</include>
+                            <include>org.eclipse.jetty:jetty-io</include>
+                            <include>org.eclipse.jetty:jetty-util</include>
+                        </includes>
+                    </artifactSet>
+                    <relocations>
+                        <relocation>
+                            <pattern>org.eclipse.jetty</pattern>
+                            <shadedPattern>org.eclipse.jetty.${jetty.shaded.version}.shade</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.cometd</pattern>
+                            <shadedPattern>org.cometd.${cometd.shaded.version}.shade</shadedPattern>
+                        </relocation>
+                    </relocations>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
