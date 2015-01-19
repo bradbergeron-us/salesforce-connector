@@ -377,4 +377,9 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 		<sfdc:deploy-metadata config-ref="Salesforce" doc:name="Deploy metadata" stream-ref="#[payload.streamRef]"/>
 	</flow>
 
+	<flow name="subscribe-topic" doc:name="subscribe-topic">
+		<sfdc:subscribe-topic config-ref="Salesforce" topic="#[payload.topic]" doc:name="Salesforce (Streaming)"/>
+		<logger message="#[payload]" level="INFO" doc:name="Logger"/>
+	</flow>
+	
 </mule>
