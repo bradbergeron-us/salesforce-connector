@@ -1197,4 +1197,11 @@
 			<entry key="externalIdFieldName" value="Id" />
 			<entry key="operation" value="insert" />
 		</util:map>
+		
+		<!-- Subscribe Topic -->
+		
+		<util:map id="subscribeTopicTestData" map-class="java.util.HashMap"
+			key-type="java.lang.String" value-type="java.lang.Object">
+			<entry key="topic" value="TestTopic" />
+		</util:map>
 </beans>
