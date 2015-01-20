@@ -67,7 +67,7 @@ public class SearchTestCases extends SalesforceTestParent {
 	@Category({RegressionTests.class})
 	@Test
 	@Ignore(value = "Run separately")
-	public void testSearch() {
+	public void testSearch() { //NOSONAR
 		
 		List<String> createdRecordIds = getTestRunMessageValue("idsToDeleteFromMessage");
 		List<String> returnedSObjectsIds = new ArrayList<String>();
