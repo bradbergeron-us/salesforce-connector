@@ -25,7 +25,7 @@
         <connector.test.version>2.0.3</connector.test.version>
         <mule.test.timeoutSecs>180</mule.test.timeoutSecs>
         <jdk.version>1.6</jdk.version>
-        <sonar.exclusions>org/mule/modules/salesforce/connection/CustomMetadataConnection.java, org/mule/modules/salesforce/connection/CustomPartnerConnection.java</sonar.exclusions>
+        <sonar.exclusions>**/org/mule/modules/salesforce/connection/CustomMetadataConnection.java, **/org/mule/modules/salesforce/connection/CustomPartnerConnection.java</sonar.exclusions>
     </properties>
 
     <build>
