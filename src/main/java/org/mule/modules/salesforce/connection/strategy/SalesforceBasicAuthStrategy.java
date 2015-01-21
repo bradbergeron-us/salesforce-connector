@@ -290,6 +290,7 @@ public class SalesforceBasicAuthStrategy extends SalesforceStrategy {
      * @param proxyPassword
      * @return
      */
+    @NotNull
     public ConnectorConfig createConnectorConfig(@NotNull final String endpoint, @NotNull final String username, String password, @Nullable final String proxyHost, int proxyPort, @Nullable final String proxyUsername, @Nullable final String proxyPassword, int readTimeout, int connectionTimeout) {
         ConnectorConfig config = new ConnectorConfig();
         config.setUsername(username);
@@ -305,11 +306,18 @@ public class SalesforceBasicAuthStrategy extends SalesforceStrategy {
 
         config.setCompression(false);
 
-        if (proxyHost != null && proxyUsername != null && proxyPassword != null) {
-            //Updated to use Proxy instead of proxyUserName since it does not work on certain ms proxies.
-            Authenticator.setDefault(new ProxyAuthenticator(proxyUsername, proxyPassword));
-            Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort));
-            config.setProxy(proxy);
+        // Configure proxy settings ...
+        if (proxyHost != null) {
+            //CLDCONNECT-1119: Updated to use proxy instead of proxyUserName since it does not work on certain ms proxies.
+            if (proxyUsername != null && proxyPassword != null) {
+
+                Authenticator.setDefault(new ProxyAuthenticator(proxyUsername, proxyPassword));
+                final Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort));
+                config.setProxy(proxy);
+            } else {
+                // Configure default authentication ...
+                config.setProxy(proxyHost, proxyPort);
+            }
         }
 
         SessionRenewer sessionRenewer = new SessionRenewer() {
