@@ -24,6 +24,8 @@ import com.sforce.ws.MessageHandler;
 import com.sforce.ws.SessionRenewer;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.mule.api.ConnectionExceptionCode;
 import org.mule.api.annotations.components.*;
 import org.mule.api.annotations.Connect;
@@ -270,7 +272,7 @@ public class SalesforceBasicAuthStrategy extends SalesforceStrategy {
             connection.getConfig().setServiceEndpoint(loginResult.getServerUrl());
             connection.getConfig().setSessionId(loginResult.getSessionId());
         } catch (ApiFault e) {
-            throw new org.mule.api.ConnectionException(ConnectionExceptionCode.UNKNOWN, ((ApiFault) e).getExceptionCode().name(), ((ApiFault) e).getExceptionMessage(), e);
+            throw new org.mule.api.ConnectionException(ConnectionExceptionCode.UNKNOWN, e.getExceptionCode().name(), e.getExceptionMessage(), e);
         } catch (ConnectionException e) {
             throw new org.mule.api.ConnectionException(ConnectionExceptionCode.UNKNOWN, null, e.getMessage(), e);
         }
@@ -288,7 +290,7 @@ public class SalesforceBasicAuthStrategy extends SalesforceStrategy {
      * @param proxyPassword
      * @return
      */
-    public ConnectorConfig createConnectorConfig(String endpoint, String username, String password, String proxyHost, int proxyPort, String proxyUsername, String proxyPassword, int readTimeout, int connectionTimeout) {
+    public ConnectorConfig createConnectorConfig(@NotNull final String endpoint, @NotNull final String username, String password, @Nullable final String proxyHost, int proxyPort, @Nullable final String proxyUsername, @Nullable final String proxyPassword, int readTimeout, int connectionTimeout) {
         ConnectorConfig config = new ConnectorConfig();
         config.setUsername(username);
         config.setPassword(password);
