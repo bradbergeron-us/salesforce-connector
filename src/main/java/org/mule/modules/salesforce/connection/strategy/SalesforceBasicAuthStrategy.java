@@ -57,8 +57,8 @@ import java.net.*;
  *
  * @author MuleSoft, Inc.
  */
-@ConnectionManagement(friendlyName="Basic authentication")
-public class SalesforceBasicAuthStrategy extends SalesforceStrategy{
+@ConnectionManagement(friendlyName = "Basic authentication")
+public class SalesforceBasicAuthStrategy extends SalesforceStrategy {
     private static final Logger logger = Logger.getLogger(SalesforceBasicAuthStrategy.class);
 
     /**
@@ -156,7 +156,6 @@ public class SalesforceBasicAuthStrategy extends SalesforceStrategy{
     }
 
 
-
     /**
      * Creates a new Salesforce session
      *
@@ -208,10 +207,10 @@ public class SalesforceBasicAuthStrategy extends SalesforceStrategy{
         }
 
         try {
-            PartnerConnection _connection = Connector.newConnection(connectorConfig);
+            final PartnerConnection connection = Connector.newConnection(connectorConfig);
             this.connection = new CustomPartnerConnection();
-            this.connection.setConnection(_connection);
-            setConnectionOptions(connection);
+            this.connection.setConnection(connection);
+            setConnectionOptions(this.connection);
         } catch (ConnectionException e) {
             throw new org.mule.api.ConnectionException(ConnectionExceptionCode.UNKNOWN, null, e.getMessage(), e);
         }
@@ -305,11 +304,9 @@ public class SalesforceBasicAuthStrategy extends SalesforceStrategy{
         config.setCompression(false);
 
         if (proxyHost != null && proxyUsername != null && proxyPassword != null) {
-
-            //Updated to use Proxy instead of proxyUserName since it does not work on ceratain ms proxies.
+            //Updated to use Proxy instead of proxyUserName since it does not work on certain ms proxies.
             Authenticator.setDefault(new ProxyAuthenticator(proxyUsername, proxyPassword));
             Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort));
-
             config.setProxy(proxy);
         }
 

@@ -89,16 +89,7 @@ public abstract class SalesforceStrategy {
 
 
     /**
-     *
-     *
-     *
-     *
      * DEFINE BEHAVIOUR FOR SUBCLASSES STRATEGIES
-     *
-     *
-     *
-     *
-     *
      */
 
 
@@ -114,16 +105,7 @@ public abstract class SalesforceStrategy {
 
 
     /**
-     *
-     *
-     *
-     *
      * HELPER METHODS
-     *
-     *
-     *
-     *
-     *
      */
 
 
@@ -196,14 +178,7 @@ public abstract class SalesforceStrategy {
 
 
     /**
-     *
-     *
-     *
-     *
      * GETTERS AND SETTERS
-     *
-     *
-     *
      */
 
     protected boolean isInitializedBayeuxClient() {
