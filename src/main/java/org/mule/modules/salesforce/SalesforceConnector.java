@@ -330,7 +330,7 @@ public class SalesforceConnector implements MuleContextAware {
     @Processor
     @OAuthProtected
     @Category(name = "Bulk API", description = "The Bulk API provides programmatic access to allow you to quickly load your organization's data into Salesforce.")
-    public BatchInfo createBatchStream(JobInfo jobInfo, @Default("#[payload]") InputStream stream) throws AsyncApiException {
+    public BatchInfo createBatchStream(@Default("#[payload]") JobInfo jobInfo, InputStream stream) throws AsyncApiException {
     	if(ContentType.ZIP_XML.equals(jobInfo.getContentType()) || ContentType.ZIP_CSV.equals(jobInfo.getContentType())) {
     		return getSalesforceRestAdapter().createBatchFromZipStream(jobInfo, stream);
     	} else {
@@ -355,7 +355,7 @@ public class SalesforceConnector implements MuleContextAware {
     @Processor
     @OAuthProtected
     @Category(name = "Bulk API", description = "The Bulk API provides programmatic access to allow you to quickly load your organization's data into Salesforce.")
-    public BatchInfo createBatchForQuery(JobInfo jobInfo, @Default("#[payload]") String query) throws AsyncApiException {
+    public BatchInfo createBatchForQuery(@Default("#[payload]") JobInfo jobInfo, String query) throws AsyncApiException {
         InputStream queryStream = new ByteArrayInputStream(query.getBytes(Charsets.UTF_8));
         return createBatchForQuery(jobInfo, queryStream);
     }
