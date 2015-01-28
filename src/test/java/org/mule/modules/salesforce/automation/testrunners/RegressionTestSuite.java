@@ -73,7 +73,8 @@ import org.mule.modules.salesforce.automation.testcases.*;
     UpsertMetadataTestCases.class,
     ReadMetadataTestCases.class,
     DeployRetrieveMetadataTestCases.class,
-    DeployRetrieveMetadataApexClassTestCases.class
+    DeployRetrieveMetadataApexClassTestCases.class,
+    DataSeneMetadataTestCases.class
 })
 
 public class RegressionTestSuite {
